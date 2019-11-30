@@ -45,4 +45,9 @@ class Mailchimp
 
         return null;
     }
+
+    public function member()
+    {
+        //
+    }
 }
