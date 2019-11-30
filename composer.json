@@ -1,0 +1,23 @@
+{
+    "name": "alagaccia/mailchimp",
+    "description": "Mailchimp API",
+    "type": "library",
+    "license": "NLPL",
+    "authors": [
+        {
+            "name": "Andrea Lagaccia",
+            "email": "a.lagaccia@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "alagaccia\\mailchimp\\": "src"
+        }
+    },
+    "require": {
+		"php": ">=7.0"
+	},
+	"require-dev": {
+        "ext-curl": "*"
+    }
+}
