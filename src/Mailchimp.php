@@ -45,9 +45,4 @@ class Mailchimp
 
         return null;
     }
-
-    public function send($phone, $message)
-    {
-        //
-    }
 }
