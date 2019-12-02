@@ -9,6 +9,17 @@ class Mailchimp
 {
     protected $apikey;
     protected $baseurl;
+    protected $list;
+
+    protected $GET = [
+        "LIST_INFO" => "lists/{$this->list}",
+    ];
+    protected $POST = [
+        //
+    ];
+    protected $UPDATE = [
+        //
+    ];
 
     public function __construct()
     {
@@ -17,12 +28,9 @@ class Mailchimp
         $this->list = env('MAILCHIMP_LIST');
     }
 
-    /**
-    * List information
-    */
-    public function listInfo()
+    public function get($url)
     {
-        $ch = curl_init($this->baseurl . "lists/{$this->list}");
+        $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_USERPWD, "user:{$this->apikey}");
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -35,6 +43,13 @@ class Mailchimp
         }
 
         return null;
+    }
+    /**
+    * List information
+    */
+    public function listInfo()
+    {
+        $this->get($this->baseurl . $this->GET["LIST_INFO"]);
     }
 
     public function member_count()
