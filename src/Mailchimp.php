@@ -11,16 +11,11 @@ class Mailchimp
     protected $baseurl;
     protected $list;
 
-    protected $GET = [
-        "LIST_INFO" => "lists/{$this->list}",
-        "MEMBER" => "lists/{$this->list}/members/",
-    ];
-    protected $POST = [
-        //
-    ];
-    protected $PATCH = [
-        "MEMBER" => "/lists/{$this->list}/members/",
-    ];
+    protected $GET_LIST_INFO = "lists/{$this->list}",
+    protected $GET_MEMBER = "lists/{$this->list}/members/",
+
+    protected $UPDATE_MEMBER = "/lists/{$this->list}/members/";
+
 
     public function __construct()
     {
@@ -68,7 +63,7 @@ class Mailchimp
     */
     public function listInfo()
     {
-        return $this->get($this->baseurl . $this->GET["LIST_INFO"]);
+        return $this->get($this->baseurl . $this->GET_LIST_INFO);
     }
 
     public function member_count()
@@ -82,10 +77,10 @@ class Mailchimp
 
     public function getMember($member)
     {
-        return $this->GET($this->baseurl . $this->GET["MEMBER"] . md5($member->email));
+        return $this->GET($this->baseurl . $this->GET_MEMBER . md5($member->email));
     }
     public function updateMember($member, array $data)
     {
-        return $this->patch($this->baseurl . $this->PATCH["MEMBER"] . md5($member->email), $data);
+        return $this->patch($this->baseurl . $this->UPDATE_MEMBER . md5($member->email), $data);
     }
 }
