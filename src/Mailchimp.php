@@ -1,15 +1,14 @@
 <?php
 /*
- * Skebby Class
+ * Mailchimp Class
  */
 
 namespace alagaccia\mailchimp;
+use Rest;
 
 class Mailchimp
 {
-    protected $apikey;
-    protected $baseurl;
-    protected $list;
+    use Rest;
 
     protected $GET_LIST_INFO;
     protected $GET_MEMBER;
@@ -19,48 +18,10 @@ class Mailchimp
 
     public function __construct()
     {
-        $this->baseurl = env('MAILCHIMP_BASEURL');
-        $this->apikey = env('MAILCHIMP_APIKEY');
-        $this->list = env('MAILCHIMP_LIST');
+        //
     }
 
-    public function get($url)
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_USERPWD, "user:{$this->apikey}");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        $result = curl_exec($ch);
-        $info = curl_getinfo($ch);
-
-        if ($info["http_code"] == 200) {
-            return json_decode($result);
-        }
-
-        return null;
-    }
-    public function patch($url, $data)
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_USERPWD, "user:{$this->apikey}");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-        $result = curl_exec($ch);
-        $info = curl_getinfo($ch);
-
-        // dd($data);
-        // dd($result);
-
-        if ($info["http_code"] == 200) {
-            return json_decode($result);
-        }
-
-        return null;
-    }
     /**
     * List information
     */
@@ -94,6 +55,10 @@ class Mailchimp
         if ( isset($member) ) {
             $this->UPDATE_MEMBER = "/lists/{$this->list}/members/";
             return $this->patch($this->baseurl . $this->UPDATE_MEMBER . md5(strtolower($originalEmail)), $data);
+        }
+        else {
+            $this->UPDATE_MEMBER = "/lists/{$this->list}/members/";
+            return $this->put($this->baseurl . $this->UPDATE_MEMBER . md5(strtolower($originalEmail)), $data);
         }
     }
 }
