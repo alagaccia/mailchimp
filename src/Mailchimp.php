@@ -18,7 +18,7 @@ class Mailchimp
         //
     ];
     protected $PATCH = [
-        "MEMBER" => "/lists/{$this->list}/members/";
+        "MEMBER" => "/lists/{$this->list}/members/",
     ];
 
     public function __construct()
