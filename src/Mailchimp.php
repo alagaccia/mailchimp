@@ -4,32 +4,19 @@
  */
 
 namespace alagaccia\mailchimp;
-use Rest;
+
+use alagaccia\mailchimp\Rest;
 
 class Mailchimp
 {
     use Rest;
 
-    protected $GET_LIST_INFO;
-    protected $GET_MEMBER;
 
-    protected $UPDATE_MEMBER;
-
-
-    public function __construct()
-    {
-        //
-    }
-
-
-    /**
-    * List information
-    */
     public function listInfo()
     {
-        $this->GET_LIST_INFO = "lists/{$this->list}";
+        $this->GET_LIST_INFO = "lists/{$this->LIST_ID}";
 
-        return $this->get($this->baseurl . $this->GET_LIST_INFO);
+        return $this->get($this->GET_LIST_INFO);
     }
 
     public function member_count()
@@ -41,24 +28,38 @@ class Mailchimp
         return null;
     }
 
-    public function getMember($originalEmail)
+    public function getMember($email)
     {
-        $this->GET_MEMBER = "lists/{$this->list}/members/";
+        $this->GET_MEMBER = "lists/{$this->LIST_ID}/members/";
 
-        return $this->GET($this->baseurl . $this->GET_MEMBER . md5(strtolower($originalEmail)));
+        return $this->GET($this->GET_MEMBER . md5(strtolower($email)));
     }
+
     public function updateMember($originalEmail, $data)
     {
-        $this->GET_MEMBER = "lists/{$this->list}/members/";
-        $member = $this->GET($this->baseurl . $this->GET_MEMBER . md5(strtolower($originalEmail)));
+        $this->GET_MEMBER = "lists/{$this->LIST_ID}/members/";
+        $member = $this->GET($this->GET_MEMBER . md5(strtolower($originalEmail)));
 
         if ( isset($member) ) {
-            $this->UPDATE_MEMBER = "/lists/{$this->list}/members/";
-            return $this->patch($this->baseurl . $this->UPDATE_MEMBER . md5(strtolower($originalEmail)), $data);
+            $this->UPDATE_MEMBER = "/lists/{$this->LIST_ID}/members/";
+            return $this->patch($this->UPDATE_MEMBER . md5(strtolower($originalEmail)), $data);
         }
         else {
-            $this->UPDATE_MEMBER = "/lists/{$this->list}/members/";
-            return $this->put($this->baseurl . $this->UPDATE_MEMBER . md5(strtolower($originalEmail)), $data);
+            $this->UPDATE_MEMBER = "/lists/{$this->LIST_ID}/members/";
+            return $this->put($this->UPDATE_MEMBER . md5(strtolower($originalEmail)), $data);
         }
+    }
+
+    public function storeMember($email, $data)
+    {
+        if ( ! $this->getMember($email) ) {
+            $this->STORE_MEMBER =  "/lists/{$this->LIST_ID}/members/";
+
+            return $this->post($this->STORE_MEMBER, $data);
+        }
+
+        return response()->json([
+            'errors'=>'Cliente già esistente'
+        ], 422);
     }
 }
