@@ -80,16 +80,16 @@ class Mailchimp
         return null;
     }
 
-    public function getMember($member)
+    public function getMember($originalEmail)
     {
         $this->GET_MEMBER = "lists/{$this->list}/members/";
 
-        return $this->GET($this->baseurl . $this->GET_MEMBER . md5(strtolower($member->email)));
+        return $this->GET($this->baseurl . $this->GET_MEMBER . md5(strtolower($originalEmail)));
     }
     public function updateMember($originalEmail, $data)
     {
         $this->GET_MEMBER = "lists/{$this->list}/members/";
-        $member = $this->GET($this->baseurl . $this->GET_MEMBER . md5(strtolower($member->email)));
+        $member = $this->GET($this->baseurl . $this->GET_MEMBER . md5(strtolower($originalEmail)));
 
         if ( isset($member) ) {
             $this->UPDATE_MEMBER = "/lists/{$this->list}/members/";
