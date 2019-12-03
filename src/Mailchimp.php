@@ -11,10 +11,10 @@ class Mailchimp
     protected $baseurl;
     protected $list;
 
-    protected $GET_LIST_INFO = "lists/{$this->list}",
-    protected $GET_MEMBER = "lists/{$this->list}/members/",
+    protected $GET_LIST_INFO;
+    protected $GET_MEMBER;
 
-    protected $UPDATE_MEMBER = "/lists/{$this->list}/members/";
+    protected $UPDATE_MEMBER;
 
 
     public function __construct()
@@ -40,7 +40,7 @@ class Mailchimp
 
         return null;
     }
-    public function patch($url, array $data)
+    public function patch($url, $data)
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_USERPWD, "user:{$this->apikey}");
@@ -51,6 +51,9 @@ class Mailchimp
 
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
+
+        // dd($data);
+        // dd($result);
 
         if ($info["http_code"] == 200) {
             return json_decode($result);
@@ -63,6 +66,8 @@ class Mailchimp
     */
     public function listInfo()
     {
+        $this->GET_LIST_INFO = "lists/{$this->list}";
+
         return $this->get($this->baseurl . $this->GET_LIST_INFO);
     }
 
@@ -77,10 +82,18 @@ class Mailchimp
 
     public function getMember($member)
     {
-        return $this->GET($this->baseurl . $this->GET_MEMBER . md5($member->email));
+        $this->GET_MEMBER = "lists/{$this->list}/members/";
+
+        return $this->GET($this->baseurl . $this->GET_MEMBER . md5(strtolower($member->email)));
     }
-    public function updateMember($member, array $data)
+    public function updateMember($originalEmail, $data)
     {
-        return $this->patch($this->baseurl . $this->UPDATE_MEMBER . md5($member->email), $data);
+        $this->GET_MEMBER = "lists/{$this->list}/members/";
+        $member = $this->GET($this->baseurl . $this->GET_MEMBER . md5(strtolower($member->email)));
+
+        if ( isset($member) ) {
+            $this->UPDATE_MEMBER = "/lists/{$this->list}/members/";
+            return $this->patch($this->baseurl . $this->UPDATE_MEMBER . md5(strtolower($originalEmail)), $data);
+        }
     }
 }
