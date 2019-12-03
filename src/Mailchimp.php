@@ -13,6 +13,7 @@ class Mailchimp
 
     protected $GET = [
         "LIST_INFO" => "lists/{$this->list}",
+        "MEMBER" => "lists/{$this->list}/members/",
     ];
     protected $POST = [
         //
@@ -79,9 +80,9 @@ class Mailchimp
         return null;
     }
 
-    public function getMember()
+    public function getMember($member)
     {
-        //
+        return $this->GET($this->baseurl . $this->GET["MEMBER"] . md5($member->email));
     }
     public function updateMember($member, array $data)
     {
