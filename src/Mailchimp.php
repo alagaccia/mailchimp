@@ -12,16 +12,36 @@ class Mailchimp
     use Rest;
 
 
-    public function listInfo()
+    public function getListInfo()
     {
         $this->GET_LIST_INFO = "lists/{$this->LIST_ID}";
 
         return $this->get($this->GET_LIST_INFO);
     }
 
-    public function member_count()
+    public function getMembers($query = null)
     {
-        if ( $list = $this->listInfo() ) {
+        $this->GET_MEMBERS = "lists/{$this->LIST_ID}/members{$query}";
+
+        return $this->get($this->GET_MEMBERS);
+    }
+
+    public function total_members()
+    {
+        $total = 0;
+
+        if ( $list = $this->getListInfo() ) {
+            $total += $list->stats->member_count;
+            $total += $list->stats->unsubscribe_count;
+            $total += $list->stats->cleaned_count;
+        }
+
+        return $total;
+    }
+
+    public function total_subscribers()
+    {
+        if ( $list = $this->getlistInfo() ) {
             return $list->stats->member_count;
         }
 
@@ -32,13 +52,15 @@ class Mailchimp
     {
         $this->GET_MEMBER = "lists/{$this->LIST_ID}/members/";
 
-        return $this->GET($this->GET_MEMBER . md5(strtolower($email)));
+        return $this->get($this->GET_MEMBER . md5(strtolower($email)));
     }
 
     public function updateMember($originalEmail, $data)
     {
         $this->GET_MEMBER = "lists/{$this->LIST_ID}/members/";
-        $member = $this->GET($this->GET_MEMBER . md5(strtolower($originalEmail)));
+        $member = $this->get($this->GET_MEMBER . md5(strtolower($originalEmail)));
+
+        dd($originalEmail);
 
         if ( isset($member) ) {
             $this->UPDATE_MEMBER = "/lists/{$this->LIST_ID}/members/";
