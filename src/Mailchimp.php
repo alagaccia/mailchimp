@@ -78,9 +78,9 @@ class Mailchimp
         }
     }
 
-    public function storeMember($email, $data)
+    public function storeMember($client, $data)
     {
-        if ( ! $this->getMember($email) ) {
+        if ( ! $this->getMember($client->email) ) {
             $this->STORE_MEMBER =  "lists/{$this->LIST_ID}/members/";
 
             $res = $this->post($this->STORE_MEMBER, $data);

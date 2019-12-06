@@ -56,11 +56,7 @@ trait Rest
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
 
-        if ($info["http_code"] == 200) {
-            return json_decode($result);
-        }
-
-        return null;
+        return $result;
     }
 
     public function put($url, $data)
@@ -77,11 +73,7 @@ trait Rest
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
 
-        if ($info["http_code"] == 200) {
-            return json_decode($result);
-        }
-
-        return null;
+        return $result;
     }
 
     public function post($url, $data)
@@ -98,10 +90,6 @@ trait Rest
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
 
-        if ($info["http_code"] == 200) {
-            return json_decode($result);
-        }
-
-        return null;
+        return $result;
     }
 }
