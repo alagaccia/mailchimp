@@ -42,7 +42,7 @@ trait Rest
         return null;
     }
 
-    public function patch($url, $data)
+    public function patch($url, $FIELDS)
     {
         $url = $this->BASE_URL . $url;
 
@@ -51,7 +51,7 @@ trait Rest
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($FIELDS));
 
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
@@ -59,7 +59,7 @@ trait Rest
         return $result;
     }
 
-    public function put($url, $data)
+    public function put($url, $FIELDS)
     {
         $url = $this->BASE_URL . $url;
 
@@ -68,7 +68,7 @@ trait Rest
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($FIELDS));
 
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
@@ -76,7 +76,7 @@ trait Rest
         return $result;
     }
 
-    public function post($url, $data)
+    public function post($url, $FIELDS)
     {
         $url = $this->BASE_URL . $url;
 
@@ -85,7 +85,7 @@ trait Rest
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($FIELDS));
 
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);

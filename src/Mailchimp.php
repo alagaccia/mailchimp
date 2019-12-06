@@ -57,7 +57,7 @@ class Mailchimp
         return $res;
     }
 
-    public function updateMember($originalEmail, $data)
+    public function updateMember($client, $originalEmail, $FIELDS)
     {
         $this->GET_MEMBER = "lists/{$this->LIST_ID}/members/";
         $member = $this->get($this->GET_MEMBER . md5(strtolower($originalEmail)));
@@ -65,25 +65,25 @@ class Mailchimp
         if ( isset($member) ) {
             $this->UPDATE_MEMBER = "lists/{$this->LIST_ID}/members/";
 
-            $res = $this->patch($this->UPDATE_MEMBER . md5(strtolower($originalEmail)), $data);
+            $res = $this->patch($this->UPDATE_MEMBER . md5(strtolower($originalEmail)), $FIELDS);
 
             return $res;
         }
         else {
-            $data["email_address"] = $data["merge_fields"]["EMAIL"];
-            $data["status"] = "subscribed";
-            $res = $this->storeMember($originalEmail, $data);
+            $FIELDS["email_address"] = $FIELDS["merge_fields"]["EMAIL"];
+            $FIELDS["status"] = "subscribed";
+            $res = $this->storeMember($client, $FIELDS);
 
             return $res;
         }
     }
 
-    public function storeMember($client, $data)
+    public function storeMember($client, $FIELDS)
     {
         if ( ! $this->getMember($client->email) ) {
             $this->STORE_MEMBER =  "lists/{$this->LIST_ID}/members/";
 
-            $res = $this->post($this->STORE_MEMBER, $data);
+            $res = $this->post($this->STORE_MEMBER, $FIELDS);
 
             return $res;
         }
