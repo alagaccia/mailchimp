@@ -1,6 +1,6 @@
 <?php
 /*
- * Route trai
+ * Route trait
  */
 
 namespace alagaccia\mailchimp;
