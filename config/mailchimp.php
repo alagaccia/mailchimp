@@ -1,0 +1,7 @@
+<?php
+
+return [
+    'MAILCHIMP_BASEURL' => env('MAILCHIMP_BASEURL'),
+    'MAILCHIMP_APIKEY' => env('MAILCHIMP_APIKEY'),
+    'MAILCHIMP_LIST' => env('MAILCHIMP_LIST'),
+];

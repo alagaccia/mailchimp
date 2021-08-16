@@ -18,9 +18,9 @@ trait Rest
 
     public function __construct()
     {
-        $this->BASE_URL = env('MAILCHIMP_BASEURL');
-        $this->API_KEY = env('MAILCHIMP_APIKEY');
-        $this->LIST_ID = env('MAILCHIMP_LIST');
+        $this->BASE_URL = config('mailchimp.MAILCHIMP_BASEURL') ?? env('MAILCHIMP_BASEURL');
+        $this->API_KEY = config('mailchimp.MAILCHIMP_APIKEY') ?? env('MAILCHIMP_APIKEY');
+        $this->LIST_ID = config('mailchimp.MAILCHIMP_LIST') ?? env('MAILCHIMP_LIST');
     }
 
     public function get($url)
