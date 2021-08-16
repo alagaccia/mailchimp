@@ -1,3 +1,3 @@
 ### What is this repository for? ###
 
-* Mailchimp API
+* Mailchimp API for Laravel
